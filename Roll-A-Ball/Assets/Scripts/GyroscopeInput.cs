@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class GyroscopeInput : MonoBehaviour
@@ -7,20 +8,23 @@ public class GyroscopeInput : MonoBehaviour
 
     public float smoothSpeed = 5f;
 
+    private float countdownInterval = 4f;
+    private bool gyroReady = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         Input.gyro.enabled = false;
-        Input.gyro.enabled = true;
-        Debug.Log("Gyro Enabled!");
-
-        // Saving the current phone orientation, this = flat
-        referenceRotation = GyroToUnity(Input.gyro.attitude);
+        StartCoroutine(InitialiseGyro());
     }
 
     // Update is called once per frame
     void Update()
     {
+        // If the gyro hasn't finished initalising (during 3s countdown),
+        // don't perform any updates yet
+        if (!gyroReady) return;
+
         // Get the current rotation of the gyroscope
         Quaternion currentRotation = GyroToUnity(Input.gyro.attitude);
         // Calculate how far the device has rotated away from the starting position
@@ -38,7 +42,9 @@ public class GyroscopeInput : MonoBehaviour
         float pitch = Mathf.Clamp(signedPitch, -35.0f, 35.0f);
         float roll = Mathf.Clamp(signedRoll, -35.0f, 35.0f);
 
-        Debug.Log($"Pitch: {pitch} Roll: {roll}");
+
+        /* Debug.Log($"Pitch: {pitch} Roll: {roll}"); */
+
 
         // Find the target rotation using the current pitch and roll
         Quaternion target = Quaternion.Euler(pitch, 0, roll);
@@ -50,5 +56,18 @@ public class GyroscopeInput : MonoBehaviour
     private Quaternion GyroToUnity(Quaternion q)
     {
         return new Quaternion(q.x, q.y, -q.z, -q.w);
+    }
+
+    IEnumerator InitialiseGyro()
+    {
+        Input.gyro.enabled = true;
+
+        yield return new WaitForSeconds(countdownInterval);
+
+        // Saving the current phone orientation, this = flat
+        referenceRotation = GyroToUnity(Input.gyro.attitude);
+        gyroReady = true;
+
+        Debug.Log("Gyro Calibrated!");
     }
 }
