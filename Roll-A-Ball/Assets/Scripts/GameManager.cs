@@ -13,7 +13,6 @@ public class GameManager : MonoBehaviour
     public bool gamePaused;
 
     [Header("Start variables")]
-    public float countdownInterval = 1.0f;
     public TextMeshProUGUI countdownText;
 
     Scene currentScene;
@@ -63,16 +62,16 @@ public class GameManager : MonoBehaviour
     IEnumerator Countdown()
     {
         countdownText.text = "3";
-        yield return new WaitForSeconds(countdownInterval);
+        yield return new WaitForSeconds(1f);
 
         countdownText.text = "2";
-        yield return new WaitForSeconds(countdownInterval);
+        yield return new WaitForSeconds(1f);
 
         countdownText.text = "1";
-        yield return new WaitForSeconds(countdownInterval);
+        yield return new WaitForSeconds(1f);
 
         countdownText.text = "GO!";
-        yield return new WaitForSeconds(countdownInterval);
+        yield return new WaitForSeconds(1f);
 
         countdownText.text = null;
         player.GetComponent<Rigidbody>().useGravity = true;

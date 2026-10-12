@@ -8,7 +8,6 @@ public class GyroscopeInput : MonoBehaviour
 
     public float smoothSpeed = 5f;
 
-    private float countdownInterval = 4f;
     private bool gyroReady = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -62,12 +61,18 @@ public class GyroscopeInput : MonoBehaviour
     {
         Input.gyro.enabled = true;
 
-        yield return new WaitForSeconds(countdownInterval);
+        yield return new WaitForSeconds(4);
 
         // Saving the current phone orientation, this = flat
         referenceRotation = GyroToUnity(Input.gyro.attitude);
         gyroReady = true;
 
         Debug.Log("Gyro Calibrated!");
+    }
+
+    public void RecenterGyro()
+    {
+        referenceRotation = GyroToUnity(Input.gyro.attitude);
+        gyroReady = true;
     }
 }
