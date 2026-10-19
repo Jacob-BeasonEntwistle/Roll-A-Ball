@@ -2,11 +2,16 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
     [Header("Player variables")]
     [SerializeField] private GameObject player;
+    private Rigidbody playerRb;
+
+    [SerializeField] private GameObject ground;
+    private GyroscopeInput gyro;
 
     [Header("Menu variables")]
     [SerializeField] private GameObject pauseMenu;
@@ -23,8 +28,13 @@ public class GameManager : MonoBehaviour
         currentScene = SceneManager.GetActiveScene();
 
         pauseMenu.SetActive(false);
-        countdownText.text = null;
-        player.GetComponent<Rigidbody>().useGravity = false;
+        countdownText.text = "";
+
+        playerRb = player.GetComponent<Rigidbody>();
+        playerRb.useGravity = false;
+
+        gyro = ground.GetComponent<GyroscopeInput>();
+        Debug.Log($"Gyro component found: {gyro}");
 
         StartCoroutine(Countdown());
     }
@@ -59,8 +69,24 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(currentScene.name);
     }
 
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
     IEnumerator Countdown()
     {
+        Debug.Log("Countdown started");
+
+        countdownText.text = "Please hold device comfortably\nGyro initialising...";
+
+        while (!gyro.gyroReady)
+        {
+            yield return null;
+        }
+
+        Debug.Log("gyroReady detected by GameManager");
+
         countdownText.text = "3";
         yield return new WaitForSeconds(1f);
 
@@ -73,7 +99,7 @@ public class GameManager : MonoBehaviour
         countdownText.text = "GO!";
         yield return new WaitForSeconds(1f);
 
-        countdownText.text = null;
-        player.GetComponent<Rigidbody>().useGravity = true;
+        countdownText.text = "";
+        playerRb.useGravity = true;
     }
 }
