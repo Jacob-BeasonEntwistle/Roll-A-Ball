@@ -1,9 +1,8 @@
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class LaserGate : MonoBehaviour
 {
     public Transform ground;
-    public Transform launcherObject;
 
     public Transform groundCheck;
     public float groundDistance;
@@ -15,23 +14,23 @@ public class Projectile : MonoBehaviour
 
     Vector3 moveDirection;
 
+    private GameManager gameManager;
+
     private void Start()
     {
-        if (launcherObject == null)
-        {
-            Debug.LogWarning("Reference object not assigned.");
-            return;
-        }
-
         groundDistance = 0.4f;
 
         // Store the launcher's direction relative to the ground (local-space instead of world-space)
-        moveDirection = ground.InverseTransformDirection(launcherObject.forward);
+        moveDirection = ground.InverseTransformDirection(this.transform.forward);
+
+        gameManager = FindFirstObjectByType<GameManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!gameManager.gameStarted) return;
+
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (wasGrounded && !isGrounded)

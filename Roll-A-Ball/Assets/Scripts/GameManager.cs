@@ -22,9 +22,13 @@ public class GameManager : MonoBehaviour
 
     Scene currentScene;
 
+    public bool gameStarted;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        gameStarted = false;
+
         currentScene = SceneManager.GetActiveScene();
 
         pauseMenu.SetActive(false);
@@ -73,7 +77,7 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene("MainMenu");
     }
-
+    
     IEnumerator Countdown()
     {
         Debug.Log("Countdown started");
@@ -101,5 +105,6 @@ public class GameManager : MonoBehaviour
 
         countdownText.text = "";
         playerRb.useGravity = true;
+        gameStarted = true;
     }
 }

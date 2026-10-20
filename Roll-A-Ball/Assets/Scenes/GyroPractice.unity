@@ -861,6 +861,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   smoothSpeed: 5
+  gyroReady: 0
 --- !u!54 &475649252
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1261,7 +1262,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 1b54a0b73454b33479d2d6231dbbac69, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1756,9 +1757,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   player: {fileID: 1019382009}
+  ground: {fileID: 0}
   pauseMenu: {fileID: 1417404022}
   gamePaused: 0
-  countdownInterval: 1
   countdownText: {fileID: 636939739}
 --- !u!4 &1400800132
 Transform:
