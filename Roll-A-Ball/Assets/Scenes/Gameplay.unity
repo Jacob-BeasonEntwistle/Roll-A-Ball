@@ -1097,7 +1097,7 @@ GameObject:
   - component: {fileID: 919975172}
   m_Layer: 0
   m_Name: LaserGate
-  m_TagString: Untagged
+  m_TagString: Laser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1111,8 +1111,8 @@ Transform:
   m_GameObject: {fileID: 919975167}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.475, y: 1.75, z: 0.34}
-  m_LocalScale: {x: 0.1, y: 2, z: 0.01}
+  m_LocalPosition: {x: 10.178572, y: 1.75, z: 7.285714}
+  m_LocalScale: {x: 2.142859, y: 2, z: 0.2142858}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 138620605}
@@ -1133,7 +1133,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1231,7 +1231,7 @@ GameObject:
   - component: {fileID: 922333275}
   m_Layer: 0
   m_Name: LaserGate (1)
-  m_TagString: Untagged
+  m_TagString: Laser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1244,9 +1244,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 922333273}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.4760001, y: 1.75, z: 0.018999964}
-  m_LocalScale: {x: 0.1, y: 2, z: 0.01}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -10.200002, y: 1.75, z: 0.4071421}
+  m_LocalScale: {x: 2.142859, y: 2, z: 0.2142858}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1936740413}
@@ -1287,7 +1287,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1363,6 +1363,7 @@ GameObject:
   - component: {fileID: 1019382011}
   - component: {fileID: 1019382010}
   - component: {fileID: 1019382014}
+  - component: {fileID: 1019382015}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1457,7 +1458,7 @@ Transform:
   m_GameObject: {fileID: 1019382009}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1.5, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1490,6 +1491,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1019382015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1019382009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8f2f5d254de6264fadfdfd24ce21041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  currentHearts: 0
+  rb: {fileID: 1019382014}
+  render: {fileID: 0}
 --- !u!1 &1137932229
 GameObject:
   m_ObjectHideFlags: 0
@@ -1892,7 +1908,7 @@ GameObject:
   - component: {fileID: 1318358633}
   - component: {fileID: 1318358632}
   - component: {fileID: 1318358631}
-  - component: {fileID: 1318358630}
+  - component: {fileID: 1318358636}
   - component: {fileID: 1318358635}
   - component: {fileID: 1318358634}
   m_Layer: 3
@@ -1902,27 +1918,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!65 &1318358630
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1318358629}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1318358631
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1979,7 +1974,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1318358629}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 8616276468678558677, guid: 476195094e91ba54a986b4ac454fc82c, type: 3}
 --- !u!4 &1318358633
 Transform:
   m_ObjectHideFlags: 0
@@ -1990,7 +1985,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 7.5, y: 0.25, z: 7.5}
+  m_LocalScale: {x: 0.35, y: 0.25, z: 0.35}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 919975168}
@@ -2039,6 +2034,28 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 32
   m_CollisionDetection: 0
+--- !u!64 &1318358636
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318358629}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 8616276468678558677, guid: 476195094e91ba54a986b4ac454fc82c, type: 3}
 --- !u!1 &1400800130
 GameObject:
   m_ObjectHideFlags: 0
@@ -2073,6 +2090,7 @@ MonoBehaviour:
   pauseMenu: {fileID: 1417404022}
   gamePaused: 0
   countdownText: {fileID: 636939739}
+  gameStarted: 0
 --- !u!4 &1400800132
 Transform:
   m_ObjectHideFlags: 0
@@ -2889,7 +2907,7 @@ GameObject:
   - component: {fileID: 1998935627}
   m_Layer: 0
   m_Name: LaserGate (2)
-  m_TagString: Untagged
+  m_TagString: Laser
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2903,8 +2921,8 @@ Transform:
   m_GameObject: {fileID: 1998935625}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.475, y: 1.75, z: -0.35800007}
-  m_LocalScale: {x: 0.1, y: 2, z: 0.01}
+  m_LocalPosition: {x: 10.178572, y: 1.75, z: -7.67143}
+  m_LocalScale: {x: 2.142859, y: 2, z: 0.2142858}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1967314179}
@@ -2945,7 +2963,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
