@@ -7,6 +7,7 @@ public class PlayerState : MonoBehaviour
     // Health System
     public int currentHearts;
     private int maxHearts = 3;
+    [SerializeField] public GameObject[] heartIcons;
 
     // Invincibility after taking hits
     private float timer;
@@ -28,6 +29,11 @@ public class PlayerState : MonoBehaviour
     {
         // Set the default values
         currentHearts = maxHearts;
+        for (int i = 0; i < heartIcons.Length; i++)
+        {
+            heartIcons[i].SetActive(true);
+        }
+
         isInvincible = false;
         isDead = false;
 
@@ -115,16 +121,23 @@ public class PlayerState : MonoBehaviour
             // Take away 1 heart
             currentHearts -= 1;
 
+            UpdateHearts();
+
             // Enable invincibilty and respawn the player
             EnableInvincibility();
             Respawn();
         }
-        // If the player has no hearts, the player is dead
-        if (currentHearts <= 0)
-        {
-            Dead();
-            return;
-        }
+        //// If the player has no hearts, the player is dead
+        //if (currentHearts <= 0)
+        //{
+        //    Dead();
+        //    return;
+        //}
+    }
+
+    public void UpdateHearts()
+    {
+        heartIcons[currentHearts].SetActive(false);
     }
 
     // Handles respawning the player

@@ -12,10 +12,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Gameplay.unity
     guid: fdf58243617ea204daebbc1a5be8c8ec
   - enabled: 0
-    path: Assets/Scenes/TopdownTest.unity
+    path: Assets/Scenes/Other Scenes/TopdownTest.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 0
-    path: Assets/Scenes/GyroPractice.unity
+    path: Assets/Scenes/Other Scenes/GyroPractice.unity
     guid: fdeefd5217c43e243a64a660d88bddea
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
