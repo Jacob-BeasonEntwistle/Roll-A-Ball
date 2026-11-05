@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour
     private float loseScreenTimer;
     private bool hasLost;
 
+    public GameObject settingsScreen;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -140,6 +142,18 @@ public class GameManager : MonoBehaviour
 
             pauseIcon.SetActive(true);
             playIcon.SetActive(false);
+        }
+    }
+
+    public void Settings()
+    {
+        settingsScreen.SetActive(true);
+    }
+    public void Back()
+    {
+        if (settingsScreen.activeSelf == true)
+        {
+            settingsScreen.SetActive(false);
         }
     }
 

@@ -24,6 +24,8 @@ public class PlayerState : MonoBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private Renderer render;
 
+    private int coinsCollected;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -187,5 +189,10 @@ public class PlayerState : MonoBehaviour
 
         render.enabled = true;
         isFlashing = false;
+    }
+
+    public void AddCoins(int coinValue)
+    {
+        coinsCollected += coinValue;
     }
 }
