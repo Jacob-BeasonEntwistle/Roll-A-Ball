@@ -3,16 +3,14 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
+    public GameObject settingsScreen;
+    public GameObject shopScreen;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        shopScreen.SetActive(false);
+        settingsScreen.SetActive(false);
     }
 
     public void Play()
@@ -20,8 +18,19 @@ public class MenuManager : MonoBehaviour
         SceneManager.LoadScene("Gameplay");
     }
 
-    public void Quit()
+    public void Settings()
     {
-        Application.Quit();
+        settingsScreen.SetActive(true); 
+    }
+
+    public void OpenShop()
+    {
+        shopScreen.SetActive(true);
+    }
+
+    public void CloseAll()
+    {
+        settingsScreen.SetActive(false);
+        shopScreen.SetActive(false);
     }
 }
