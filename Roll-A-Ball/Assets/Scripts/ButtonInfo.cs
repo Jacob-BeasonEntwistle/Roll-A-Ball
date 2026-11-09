@@ -13,6 +13,6 @@ public class ButtonInfo : MonoBehaviour
     void Update()
     {
         priceText.text = $"Price: {shopManager.GetComponent<ShopManager>().shopItems[2, itemID]}";
-        quantityText.text = $"{shopManager.GetComponent<ShopManager>().shopItems[2, itemID]}";
+        quantityText.text = $"{shopManager.GetComponent<ShopManager>().shopItems[3, itemID]}";
     }
 }

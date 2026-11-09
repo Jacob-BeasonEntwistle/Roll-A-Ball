@@ -24,7 +24,7 @@ public class PlayerState : MonoBehaviour
     [SerializeField] private Rigidbody rb;
     [SerializeField] private Renderer render;
 
-    private int coinsCollected;
+    public int coinsCollected;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -129,12 +129,6 @@ public class PlayerState : MonoBehaviour
             EnableInvincibility();
             Respawn();
         }
-        //// If the player has no hearts, the player is dead
-        //if (currentHearts <= 0)
-        //{
-        //    Dead();
-        //    return;
-        //}
     }
 
     public void UpdateHearts()
@@ -191,6 +185,10 @@ public class PlayerState : MonoBehaviour
         isFlashing = false;
     }
 
+    public int GetCoins()
+    {
+        return coinsCollected;
+    }
     public void AddCoins(int coinValue)
     {
         coinsCollected += coinValue;

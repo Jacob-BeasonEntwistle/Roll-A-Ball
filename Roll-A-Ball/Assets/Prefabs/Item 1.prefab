@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84f757f36375b1648a21469f168bf5e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  itemID: 0
+  itemID: 1
   priceText: {fileID: 6623842459215963235}
   quantityText: {fileID: 99982761816442896}
   shopManager: {fileID: 0}

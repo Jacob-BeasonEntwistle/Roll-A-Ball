@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Laser
   - Event
+  - Coin
   layers:
   - Default
   - TransparentFX
