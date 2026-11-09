@@ -39,6 +39,10 @@ public class GameManager : MonoBehaviour
 
     public GameObject settingsScreen;
 
+    public int currentCoins;
+    public TextMeshProUGUI coinsText;
+    public bool coinsAdded;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -47,6 +51,10 @@ public class GameManager : MonoBehaviour
         winScreenTimer = 0;
         LoseScreen.SetActive(false);
         loseScreenTimer = 0;
+
+        currentCoins = 0;
+        coinsText.text = "Coins: 0";
+        coinsAdded = false;
 
         currentScene = SceneManager.GetActiveScene();
 
@@ -72,6 +80,9 @@ public class GameManager : MonoBehaviour
     {
         if (gameStarted)
         {
+            currentCoins = player.GetComponent<PlayerState>().GetCoins();
+            coinsText.text = $"Coins: {currentCoins}";
+
             survivalTime -= Time.deltaTime;
             survivalTimerText.text = $"SURVIVE: {survivalTime.ToString("0.00")}";
 
@@ -87,6 +98,16 @@ public class GameManager : MonoBehaviour
                     {
                         Won();
                         hasWon = true;
+                        if (coinsAdded == false)
+                        {
+                            // Send the number of coins collected this game to the PlayerPrefsManager
+                            PlayerPrefsManager.CoinsToAdd(currentCoins);
+                            //Debug.Log("Coins added...");
+
+                            // Call the UpdateCoins() function within PlayerPrefsManager
+                            PlayerPrefsManager.UpdateCoins();
+                            //Debug.Log("PlayerPref coins updated...");
+                        }
                     }
 
                     winScreenTimer += Time.deltaTime;
@@ -171,7 +192,7 @@ public class GameManager : MonoBehaviour
     
     IEnumerator Countdown()
     {
-        Debug.Log("Countdown started");
+        //Debug.Log("Countdown started");
 
         countdownText.text = "Please hold device comfortably\nGyro initialising...";
 
@@ -180,7 +201,7 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        Debug.Log("gyroReady detected by GameManager");
+        //Debug.Log("gyroReady detected by GameManager");
 
         countdownText.text = "3";
         yield return new WaitForSeconds(1f);

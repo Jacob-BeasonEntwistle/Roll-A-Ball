@@ -32,9 +32,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8797642334654152077}
   - {fileID: 6440081525664214814}
   - {fileID: 985316769104700683}
-  - {fileID: 8797642334654152077}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84f757f36375b1648a21469f168bf5e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  itemID: 0
+  itemID: 1
   priceText: {fileID: 6623842459215963235}
   quantityText: {fileID: 99982761816442896}
   shopManager: {fileID: 0}

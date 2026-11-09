@@ -1,16 +1,18 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.EventSystems;
+using JetBrains.Annotations;
 
 public class ShopManager : MonoBehaviour
 {
     public int[,] shopItems = new int[5, 5];
-    public float coins;
+    private int coins;
     public TextMeshProUGUI coinsText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        coins = PlayerPrefs.GetInt("Coins");
         coinsText.text = $"Coins: {coins}";
 
         // Setting up item ID's
@@ -41,6 +43,8 @@ public class ShopManager : MonoBehaviour
         {
             // Take away the cost from the total of coins
             coins -= shopItems[2, ButtonRef.GetComponent<ButtonInfo>().itemID];
+            // Update the players coins saved in player prefs
+            PlayerPrefs.SetInt("Coins", coins);
 
             // Increment the quantity of the item
             shopItems[3, ButtonRef.GetComponent<ButtonInfo>().itemID]++;
