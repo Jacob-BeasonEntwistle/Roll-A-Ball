@@ -23,7 +23,7 @@ public class GyroscopeInput : MonoBehaviour
         // don't perform any updates yet
         if (!gyroReady)
         {
-            Debug.Log("Waiting...");
+            //Debug.Log("Waiting...");
             return;
         }
         if (gyroReady)

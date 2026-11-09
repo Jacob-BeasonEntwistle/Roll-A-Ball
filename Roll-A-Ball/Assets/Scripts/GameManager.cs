@@ -100,11 +100,13 @@ public class GameManager : MonoBehaviour
                         hasWon = true;
                         if (coinsAdded == false)
                         {
+                            // Send the number of coins collected this game to the PlayerPrefsManager
                             PlayerPrefsManager.CoinsToAdd(currentCoins);
-                            Debug.Log("Coins added...");
+                            //Debug.Log("Coins added...");
 
+                            // Call the UpdateCoins() function within PlayerPrefsManager
                             PlayerPrefsManager.UpdateCoins();
-                            Debug.Log("PlayerPref coins updated...");
+                            //Debug.Log("PlayerPref coins updated...");
                         }
                     }
 
@@ -190,7 +192,7 @@ public class GameManager : MonoBehaviour
     
     IEnumerator Countdown()
     {
-        Debug.Log("Countdown started");
+        //Debug.Log("Countdown started");
 
         countdownText.text = "Please hold device comfortably\nGyro initialising...";
 
@@ -199,7 +201,7 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
 
-        Debug.Log("gyroReady detected by GameManager");
+        //Debug.Log("gyroReady detected by GameManager");
 
         countdownText.text = "3";
         yield return new WaitForSeconds(1f);
