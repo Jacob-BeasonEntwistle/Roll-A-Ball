@@ -163,10 +163,9 @@ public class PlayerState : MonoBehaviour
         // If the player isn't dead yet
         if (isDead == false)
         {
-            // Set the player to dead, destroy the player and return to the main menu
+            // Set the player to dead, destroy the player
             isDead = true;
             Destroy(gameObject);
-            SceneManager.LoadScene("MainMenu");
         }
     }
 

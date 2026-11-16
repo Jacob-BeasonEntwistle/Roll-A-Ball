@@ -98,9 +98,5 @@ public class Coin : MonoBehaviour
             other.GetComponent<PlayerState>().AddCoins(value);
             Destroy(this.gameObject);
         }
-        if (other.CompareTag("Coin"))
-        {
-            Destroy(other.gameObject);
-        }
     }
 }

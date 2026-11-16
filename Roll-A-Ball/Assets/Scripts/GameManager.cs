@@ -2,12 +2,17 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem;
+
+public enum Gamemode
+{
+    Survival, Endless
+}
 
 public class GameManager : MonoBehaviour
 {
     [Header("Player variables")]
     [SerializeField] private GameObject player;
+    private PlayerState playerState;
     private Rigidbody playerRb;
 
     [SerializeField] private GameObject ground;
@@ -25,34 +30,49 @@ public class GameManager : MonoBehaviour
     public bool gameStarted;
 
     [Header("Gameplay variables")]
+    public static Gamemode selectedGamemode;
+
     public TextMeshProUGUI survivalTimerText;
     private float survivalTime;
     public GameObject livesUI;
 
     public GameObject WinScreen;
-    private float winScreenTimer;
     private bool hasWon;
 
     public GameObject LoseScreen;
-    private float loseScreenTimer;
     private bool hasLost;
+
+    private bool gameFinished;
+    private float returnTimer;
 
     public GameObject settingsScreen;
 
     public int currentCoins;
     public TextMeshProUGUI coinsText;
-    public bool coinsAdded;
+    private bool coinsAdded;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        survivalTimerText.text = "";
+
+        switch (selectedGamemode)
+        {
+            case Gamemode.Survival:
+                survivalTime = 30f;
+                break;
+            case Gamemode.Endless:
+                survivalTime = 0f;
+                break;
+        }
+
         gameStarted = false;
         WinScreen.SetActive(false);
-        winScreenTimer = 0;
         LoseScreen.SetActive(false);
-        loseScreenTimer = 0;
 
-        currentCoins = 0;
+        playerState = player.GetComponent<PlayerState>();
+
+        currentCoins = playerState.GetCoins();
         coinsText.text = "Coins: 0";
         coinsAdded = false;
 
@@ -63,11 +83,11 @@ public class GameManager : MonoBehaviour
         pauseIcon.SetActive(true);
         countdownText.text = "";
 
-        survivalTime = 30f;
-        survivalTimerText.text = "";
-
         playerRb = player.GetComponent<Rigidbody>();
         playerRb.useGravity = false;
+
+        gameFinished = false;
+        returnTimer = 0;
 
         gyro = ground.GetComponent<GyroscopeInput>();
         Debug.Log($"Gyro component found: {gyro}");
@@ -78,63 +98,62 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameStarted)
+        if (gameStarted && !gameFinished)
         {
-            currentCoins = player.GetComponent<PlayerState>().GetCoins();
+            currentCoins = playerState.GetCoins();
             coinsText.text = $"Coins: {currentCoins}";
 
-            survivalTime -= Time.deltaTime;
-            survivalTimerText.text = $"SURVIVE: {survivalTime.ToString("0.00")}";
-
-            if (survivalTime <= 0)
+            switch (selectedGamemode)
             {
-                survivalTime = 0;
-                survivalTimerText.text = "SURVIVED!";
-                
-                // Game won - show victory screen
-                if (WinScreen != null)
-                {
-                    if (!hasWon)
+                case Gamemode.Survival:
+                    if (survivalTime <= 0)
                     {
-                        Won();
-                        hasWon = true;
-                        if (coinsAdded == false)
-                        {
-                            // Send the number of coins collected this game to the PlayerPrefsManager
-                            PlayerPrefsManager.CoinsToAdd(currentCoins);
-                            //Debug.Log("Coins added...");
+                        survivalTime = 0;
+                        survivalTimerText.text = "SURVIVED!";
 
-                            // Call the UpdateCoins() function within PlayerPrefsManager
-                            PlayerPrefsManager.UpdateCoins();
-                            //Debug.Log("PlayerPref coins updated...");
+                        // Game won - show victory screen
+                        if (!hasWon)
+                        {
+                            Won();
                         }
                     }
-
-                    winScreenTimer += Time.deltaTime;
-
-                    if (winScreenTimer >= 5f)
+                    else if (survivalTime > 0 && playerState.currentHearts <= 0 && !hasLost)
                     {
-                        winScreenTimer = 0f;
-                        BackToMenu();
+                        // Game lost - show lost screen
+                        Lost();
                     }
-                }
+                    else
+                    {
+                        survivalTime -= Time.deltaTime;
+                        survivalTime = Mathf.Max(0, survivalTime);  // Clamps survival time to 0
+                        survivalTimerText.text = $"SURVIVE: {survivalTime.ToString("0.00")}";
+                    }
+                        break;
+
+                // Use for when Endless gamemode is selected
+                case Gamemode.Endless:
+                    if (playerState.currentHearts <= 0 && !hasLost)
+                    {
+                        Lost();
+                    }
+                    else
+                    {
+                        // Time counts upwards, try to survive as long as possible
+                        survivalTime += Time.deltaTime;
+                        survivalTimerText.text = $"CURRENT TIME: {survivalTime.ToString("0.00")}";
+                    }
+                        break;
             }
-            if (survivalTime > 0 && player.GetComponent<PlayerState>().currentHearts <= 0)
-            {
-                if (!hasLost)
-                {
-                    Lost();
-                    hasLost = true;
-                }
-                else
-                {
-                    loseScreenTimer += Time.deltaTime;
+        }
 
-                    if (loseScreenTimer >= 5f)
-                    {
-                        player.GetComponent<PlayerState>().Dead();
-                    }
-                }
+        if (gameFinished)
+        {
+            returnTimer += Time.deltaTime;
+
+            if (returnTimer >= 5f)
+            {
+                SceneManager.LoadScene("MainMenu");
+                returnTimer = 0f;
             }
         }
     }
@@ -155,7 +174,6 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            gamePaused = false;
             Time.timeScale = 1f;
             pauseMenu.SetActive(false);
             survivalTimerText.gameObject.SetActive(true);
@@ -172,7 +190,7 @@ public class GameManager : MonoBehaviour
     }
     public void Back()
     {
-        if (settingsScreen.activeSelf == true)
+        if (settingsScreen.activeSelf)
         {
             settingsScreen.SetActive(false);
         }
@@ -222,12 +240,41 @@ public class GameManager : MonoBehaviour
 
     public void Won()
     {
+        // Prevents calling the function twice
+        if (gameFinished) return;
+
+        gameFinished = true;
+        hasWon = true;
+
         WinScreen.SetActive(true);
         playerRb.useGravity = false;
-        player.gameObject.GetComponent<PlayerState>().Respawn();
+        playerState.Respawn();
+        SaveCoins();
     }
     public void Lost()
     {
+        // Prevents calling the function twice
+        if (gameFinished) return;
+
+        gameFinished = true;
+        hasLost = true;
+
         LoseScreen.SetActive(true);
+        SaveCoins();
+    }
+
+    private void SaveCoins()
+    {
+        if (coinsAdded) return;
+
+        // Send the number of coins collected this game to the PlayerPrefsManager
+        PlayerPrefsManager.CoinsToAdd(currentCoins);
+        //Debug.Log("Coins added...");
+
+        // Call the UpdateCoins() function within PlayerPrefsManager
+        PlayerPrefsManager.UpdateCoins();
+        //Debug.Log("PlayerPref coins updated...");
+
+        coinsAdded = true;
     }
 }
