@@ -1,54 +1,58 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using System.Collections.Generic;
 
 public class PlayerState : MonoBehaviour
 {
-    // Health System
-    public int currentHearts;
-    private int maxHearts = 3;
-    [SerializeField] public GameObject[] heartIcons;
+    [Header("Health System")]
+    [SerializeField] private GameObject heartPrefab;
+    [SerializeField] private GameObject UIHeartsArea;
+    [SerializeField] public List<GameObject> hearts;
+    [SerializeField] private List<Animator> heartAnimators;
+    [SerializeField] private int currentHearts;
+    [SerializeField] private bool hasExtraLife;
+    private bool isDead;
 
-    // Invincibility after taking hits
+    [Header("Invincibility")]
     private float timer;
     private float invincibilityDuration = 3f;
     private bool isInvincible;
 
-    // Respawning
+    [Header("Respawning")]
     private Vector3 respawnPoint;
     private bool isFlashing;
 
-    private bool isDead;
-
-    // Player components
+    [Header("Player Info")]
     [SerializeField] private Rigidbody rb;
     [SerializeField] private Renderer render;
-
     public int coinsCollected;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         // Set the default values
-        currentHearts = maxHearts;
-        for (int i = 0; i < heartIcons.Length; i++)
+        currentHearts = 3;
+
+        // Create the standard 3 hearts
+        for (int i = 0; i < currentHearts; i++)
         {
-            heartIcons[i].SetActive(true);
+            CreateHeart();
         }
 
         isInvincible = false;
         isDead = false;
 
+        // Set the respawn point and place the player at the spawn point
         respawnPoint = new Vector3(0f, 1.5f, 0f);
         transform.position = respawnPoint;
 
         if (rb == null)
         {
-            rb = this.gameObject.GetComponent<Rigidbody>();
+            rb = GetComponent<Rigidbody>();
         }
         if (render == null)
         {
-            render = this.gameObject.GetComponent<Renderer>();
+            render = GetComponent<Renderer>();
         }
     }
 
@@ -66,7 +70,7 @@ public class PlayerState : MonoBehaviour
         if (isInvincible)
         {
             // If the player is not flashing with invincibility
-            if (isFlashing == false)
+            if (!isFlashing)
             {
                 // Flash player visually
                 StartCoroutine(Flashing());
@@ -111,29 +115,72 @@ public class PlayerState : MonoBehaviour
                 TakeDamage();
                 Debug.Log($"Hearts left: {currentHearts}");
             }
+            else if (other.gameObject.CompareTag("ExtraLife"))
+            {
+                ActivateExtraLife();
+                Destroy(other.gameObject);
+            }
         }
     }
 
     // Handles taking damage
     public void TakeDamage()
     {
-        // If the player has more than 0 hearts and is not dead
-        if (currentHearts > 0 && !isDead)
+        // If the player has less than 0 hearts or is dead, early exit
+        if (currentHearts <= 0 || isDead) return;
+
+        // Otherwise play the damage anim
+        heartAnimators[currentHearts - 1].SetTrigger("DamageTrigger");
+
+        // Take away 1 heart
+        currentHearts--;
+
+        // Enable invincibilty and respawn the player
+        EnableInvincibility();
+        Respawn();
+    }
+
+    private void CreateHeart(bool extra = false)
+    {
+        // Get references for both the current heart and the animator attached
+        GameObject heart = Instantiate(heartPrefab, UIHeartsArea.transform);
+        Animator anim = heart.GetComponent<Animator>();
+
+        // If the created heart is the extra life
+        if (extra)
         {
-            // Take away 1 heart
-            currentHearts -= 1;
-
-            UpdateHearts();
-
-            // Enable invincibilty and respawn the player
-            EnableInvincibility();
-            Respawn();
+            // Spawn the extra heart at index 0 to maintain visual order
+            heart.transform.SetSiblingIndex(0);
+            hearts.Insert(0, heart);
+            heartAnimators.Insert(0, anim);
+        }
+        else
+        {
+            // Otherwise create hearts as normal
+            hearts.Add(heart);
+            heartAnimators.Add(anim);
         }
     }
 
-    public void UpdateHearts()
+    // Used as read-only access for external scripts
+    public int GetCurrentHearts()
     {
-        heartIcons[currentHearts].SetActive(false);
+        return currentHearts;
+    }
+
+    // Activate the extra life
+    public void ActivateExtraLife()
+    {
+        // If player already has extra life, early exit
+        if (hasExtraLife) return;
+
+        // Player has extra life
+        hasExtraLife = true;
+        // Increase number of hearts
+        currentHearts++;
+
+        // Create a heart with the condition that it is the extra life
+        CreateHeart(true);
     }
 
     // Handles respawning the player
@@ -161,7 +208,7 @@ public class PlayerState : MonoBehaviour
     public void Dead()
     {
         // If the player isn't dead yet
-        if (isDead == false)
+        if (!isDead)
         {
             // Set the player to dead, destroy the player
             isDead = true;

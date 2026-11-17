@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject player;
     private PlayerState playerState;
     private Rigidbody playerRb;
+    private int currentHearts;
 
     [SerializeField] private GameObject ground;
     private GyroscopeInput gyro;
@@ -33,7 +34,7 @@ public class GameManager : MonoBehaviour
     public static Gamemode selectedGamemode;
 
     public TextMeshProUGUI survivalTimerText;
-    private float survivalTime;
+    public float survivalTime;
     public GameObject livesUI;
 
     public GameObject WinScreen;
@@ -71,6 +72,8 @@ public class GameManager : MonoBehaviour
         LoseScreen.SetActive(false);
 
         playerState = player.GetComponent<PlayerState>();
+
+        currentHearts = playerState.GetCurrentHearts();
 
         currentCoins = playerState.GetCoins();
         coinsText.text = "Coins: 0";
@@ -117,7 +120,7 @@ public class GameManager : MonoBehaviour
                             Won();
                         }
                     }
-                    else if (survivalTime > 0 && playerState.currentHearts <= 0 && !hasLost)
+                    else if (survivalTime > 0 && currentHearts <= 0 && !hasLost)
                     {
                         // Game lost - show lost screen
                         Lost();
@@ -132,7 +135,7 @@ public class GameManager : MonoBehaviour
 
                 // Use for when Endless gamemode is selected
                 case Gamemode.Endless:
-                    if (playerState.currentHearts <= 0 && !hasLost)
+                    if (currentHearts <= 0 && !hasLost)
                     {
                         Lost();
                     }
