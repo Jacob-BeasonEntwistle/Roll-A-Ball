@@ -10,6 +10,8 @@ public class GyroscopeInput : MonoBehaviour
 
     public bool gyroReady = false;
 
+    private bool debugShown = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -21,15 +23,19 @@ public class GyroscopeInput : MonoBehaviour
     {
         // If the gyro hasn't finished initalising (during 3s countdown),
         // don't perform any updates yet
-        //if (!gyroReady)
-        //{
-        //    //Debug.Log("Waiting...");
-        //    return;
-        //}
-        //if (gyroReady)
-        //{
-        //    Debug.Log(Input.gyro.attitude);
-        //}
+        if (!gyroReady)
+        {
+            //Debug.Log("Waiting...");
+            return;
+        }
+        if (gyroReady)
+        {
+            if (!debugShown)
+            {
+                debugShown = true;
+                Debug.Log(Input.gyro.attitude);
+            }
+        }
 
         // Get the current rotation of the gyroscope
         Quaternion currentRotation = GyroToUnity(Input.gyro.attitude);
