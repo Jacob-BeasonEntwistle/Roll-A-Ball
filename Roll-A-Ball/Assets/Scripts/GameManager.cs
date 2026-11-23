@@ -106,10 +106,17 @@ public class GameManager : MonoBehaviour
             currentCoins = playerState.GetCoins();
             coinsText.text = $"Coins: {currentCoins}";
 
+            currentHearts = playerState.GetCurrentHearts();
+
             switch (selectedGamemode)
             {
                 case Gamemode.Survival:
-                    if (survivalTime <= 0)
+                    if (currentHearts <= 0 && !hasLost)
+                    {
+                        // Game lost - show lost screen
+                        Lost();
+                    }
+                    else if (survivalTime <= 0)
                     {
                         survivalTime = 0;
                         survivalTimerText.text = "SURVIVED!";
@@ -119,11 +126,6 @@ public class GameManager : MonoBehaviour
                         {
                             Won();
                         }
-                    }
-                    else if (survivalTime > 0 && currentHearts <= 0 && !hasLost)
-                    {
-                        // Game lost - show lost screen
-                        Lost();
                     }
                     else
                     {
