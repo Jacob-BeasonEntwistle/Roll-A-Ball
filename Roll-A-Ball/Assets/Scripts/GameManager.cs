@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     public static Gamemode selectedGamemode;
 
     public TextMeshProUGUI survivalTimerText;
+    private float defaultTime;
     public float survivalTime;
     public GameObject livesUI;
 
@@ -55,12 +56,14 @@ public class GameManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        defaultTime = 30f;
+
         survivalTimerText.text = "";
 
         switch (selectedGamemode)
         {
             case Gamemode.Survival:
-                survivalTime = 30f;
+                survivalTime = defaultTime;
                 break;
             case Gamemode.Endless:
                 survivalTime = 0f;
@@ -281,5 +284,25 @@ public class GameManager : MonoBehaviour
         //Debug.Log("PlayerPref coins updated...");
 
         coinsAdded = true;
+    }
+
+    public Gamemode GetSelectedGamemode()
+    {
+        return selectedGamemode;
+    }
+    public float GetTotalTime()
+    {
+        if (selectedGamemode == Gamemode.Survival)
+        {
+            return defaultTime;
+        }
+        else
+        {
+            return defaultTime * 3;
+        }
+    }
+    public float GetCurrentTime()
+    {
+        return survivalTime;
     }
 }
