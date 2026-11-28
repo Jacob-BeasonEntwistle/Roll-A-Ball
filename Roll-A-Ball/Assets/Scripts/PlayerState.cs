@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.XR;
 
 public class PlayerState : MonoBehaviour
 {
@@ -37,6 +38,16 @@ public class PlayerState : MonoBehaviour
         for (int i = 0; i < currentHearts; i++)
         {
             CreateHeart();
+        }
+
+        if (PlayerPrefs.GetInt(PlayerPrefsManager.ExtraLives, 0) > 0 &&
+            PlayerPrefs.GetInt(PlayerPrefsManager.ExtraLifeEquippedKey, 0) == 1)
+        {
+            ActivateExtraLife();
+        }
+        else
+        {
+            PlayerPrefsManager.SetExtraLifeEquipped(false);
         }
 
         isInvincible = false;
@@ -112,6 +123,7 @@ public class PlayerState : MonoBehaviour
             // If the player collides with a laser, deal damage
             if (other.gameObject.CompareTag("Laser"))
             {
+                Handheld.Vibrate();
                 TakeDamage();
                 Debug.Log($"Hearts left: {currentHearts}");
             }
@@ -171,8 +183,12 @@ public class PlayerState : MonoBehaviour
     // Activate the extra life
     public void ActivateExtraLife()
     {
-        // If player already has extra life, early exit
-        if (hasExtraLife) return;
+        // If player already has extra life, early exit and reward with 20 coins instead
+        if (hasExtraLife)
+        {
+            AddCoins(20);
+            return;
+        }
 
         // Player has extra life
         hasExtraLife = true;

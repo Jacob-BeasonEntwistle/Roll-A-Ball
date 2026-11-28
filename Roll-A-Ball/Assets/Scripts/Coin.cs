@@ -1,3 +1,4 @@
+using System;
 using System.Runtime.InteropServices;
 using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
@@ -5,6 +6,12 @@ using UnityEngine.Rendering;
 
 public class Coin : MonoBehaviour
 {
+    // Reference the player
+    [SerializeField] private GameObject player;
+    public float magneticFieldRadius;
+    public float attractionSpeed;
+
+    // References for the different rarities of materials
     [SerializeField] private Material common;
     [SerializeField] private Material uncommon;
     [SerializeField] private Material rare;
@@ -13,11 +20,18 @@ public class Coin : MonoBehaviour
 
     private Material currentRarity;
 
+    // Lifetime of the coin
     private float lifetime;
+    // Value of the coin
     private int value;
 
     private void Start()
     {
+        if (player == null)
+        {
+            player = GameObject.FindWithTag("Player");
+        }
+
         int coinRarity = RandomRarity();
 
         switch (coinRarity)
@@ -45,10 +59,27 @@ public class Coin : MonoBehaviour
         }
 
         GetComponent<Renderer>().material = currentRarity;
+
+        magneticFieldRadius = 3f;
     }
 
     private void Update()
     {
+        // If the player exists in the scene
+        if (player != null)
+        {
+            // If the player has a magnet equipped
+            if (PlayerPrefs.GetInt("MagnetEquipped", 0) == 1)
+            {
+                // If the player is within range
+                if (Vector3.Distance(transform.position, player.transform.position) <= magneticFieldRadius)
+                {
+                    // Move the coin towards the player
+                    transform.position = Vector3.Lerp(transform.position, player.transform.position, attractionSpeed * Time.deltaTime);
+                }
+            }
+        }
+
         lifetime += Time.deltaTime;
 
         if (lifetime > 10)
@@ -59,7 +90,7 @@ public class Coin : MonoBehaviour
 
     private int RandomRarity()
     {
-        int chanceRoll = Random.Range(0, 100);
+        int chanceRoll = UnityEngine.Random.Range(0, 100);
         int rarity;
 
         // 0-59: 60% chance of common
@@ -98,5 +129,10 @@ public class Coin : MonoBehaviour
             other.GetComponent<PlayerState>().AddCoins(value);
             Destroy(this.gameObject);
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, magneticFieldRadius);
     }
 }

@@ -31,11 +31,16 @@ public class CoinSpawner : MonoBehaviour
         spawnTimer = 0;
         spawnDelay = 3;
 
-        currentGamemode = gameManager.GetSelectedGamemode();
+        if (gameManager != null)
+        {
+            currentGamemode = gameManager.GetSelectedGamemode();
+            totalTime = gameManager.GetTotalTime();
+        }
 
-        totalTime = gameManager.GetTotalTime();
-
-        randomLifeSpawnTime = ExtraLifeSpawnTime();
+        if (extraLifePrefab != null)
+        {
+            randomLifeSpawnTime = ExtraLifeSpawnTime();
+        }
     }
 
     // Update is called once per frame
@@ -73,7 +78,7 @@ public class CoinSpawner : MonoBehaviour
             spawnTimer = 0;
         }
 
-        if (extraLifeSpawned == false)
+        if (gameManager != null && extraLifePrefab != null && !extraLifeSpawned)
         {
             switch (currentGamemode)
             {

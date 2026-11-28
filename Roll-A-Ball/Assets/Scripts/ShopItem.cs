@@ -2,12 +2,24 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class ButtonInfo : MonoBehaviour
+public enum ItemType
+{ 
+    Magnet, ExtraLife
+}
+
+public class ShopItem : MonoBehaviour
 {
     public int itemID;
     public TextMeshProUGUI priceText;
     public TextMeshProUGUI quantityText;
     public GameObject shopManager;
+
+    public ItemType currentItemType;
+
+    private void Start()
+    {
+
+    }
 
     // Update is called once per frame
     void Update()
